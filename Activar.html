@@ -312,15 +312,6 @@
         </div>
       </div>
 
-      <!-- LINK CLIENTES -->
-      <div class="link-box">
-        <label>&#128279; Link para tus clientes &mdash; comp&aacute;rtelo libremente</label>
-        <div class="link-input-wrap">
-          <input type="text" id="generated-link" class="link-input" readonly>
-          <button class="btn-copy-link" id="btn-copy-final" onclick="copyLink('generated-link','btn-copy-final')">&#128203; Copiar</button>
-        </div>
-      </div>
-
       <!-- LINK ADMIN -->
       <div class="link-box-admin">
         <label>&#128274; Tu panel de administraci&oacute;n &mdash; solo para ti</label>
@@ -503,20 +494,6 @@ function generateLinks(){
   });
   document.getElementById('inicio-link').value = base + 'inicio.html?' + paramsInicio.toString();
 
-  // ── LINK CLIENTES (agendar.html) ──────────────────────
-  var paramsAgendar = new URLSearchParams({
-    name:nombre, profession:prof,
-    email:email,
-    city:ciudad, department:depto,
-    apps_script:PROD_APPS_SCRIPT,
-    api_key:PROD_API_KEY,
-    am_start:amStart, am_end:amEnd,
-    pm_enabled:pmOn?'1':'0', pm_start:pmStart, pm_end:pmEnd,
-    days:days.join(','), duration:durs.join(','), buffer:buf,
-    primary:pal.primary, accent:pal.accent, gold:pal.gold
-  });
-  document.getElementById('generated-link').value = base + 'agendar.html?' + paramsAgendar.toString();
-
   // ── LINK ADMIN (admin.html) — mismos colores ──────────
   var paramsAdmin = new URLSearchParams({
     name:nombre,
@@ -547,7 +524,7 @@ function copyAgendaEmail(btn){
 }
 
 function previewLink(){
-  window.open(document.getElementById('generated-link').value,'_blank');
+  window.open(document.getElementById('inicio-link').value,'_blank');
 }
 </script>
 </body>
