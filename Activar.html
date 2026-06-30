@@ -352,17 +352,40 @@
 <footer><strong>AgendaTuCita</strong> &middot; Sistema de agendamiento profesional</footer>
 
 <script>
-// ══ CÓDIGO DE ACTIVACIÓN ══════════════════════════════
+// ══ CÓDIGO DE ACTIVACIÓN — UN SOLO USO ═══════════════
 var ACTIVATION_CODE = 'Claudia1';
+var USED_KEY = 'ata_used_' + ACTIVATION_CODE;
+
+// Verificar si ya fue activado al cargar
+window.addEventListener('load', function(){
+  if(localStorage.getItem(USED_KEY) === 'true'){
+    document.getElementById('lock-code').disabled = true;
+    document.querySelector('.lock-btn').disabled = true;
+    document.getElementById('lock-error').textContent = '⚠️ Este código ya fue activado. Si necesitas ayuda contacta a AgendaTuCita.';
+    document.getElementById('lock-error').style.display = 'block';
+    document.getElementById('lock-error').style.color = '#E67E22';
+  }
+});
 
 function checkCode() {
   var input = document.getElementById('lock-code').value.trim();
   var err   = document.getElementById('lock-error');
+
+  // Verificar si ya fue usado
+  if(localStorage.getItem(USED_KEY) === 'true'){
+    err.textContent = '⚠️ Este código ya fue activado.';
+    err.style.display = 'block';
+    return;
+  }
+
   if (input === ACTIVATION_CODE) {
+    // Marcar como usado
+    localStorage.setItem(USED_KEY, 'true');
     document.getElementById('lock-screen').style.display    = 'none';
     document.getElementById('main-container').style.display = 'block';
     err.style.display = 'none';
   } else {
+    err.textContent = '❌ Código incorrecto. Verifica el código que recibiste.';
     err.style.display = 'block';
     document.getElementById('lock-code').value = '';
     document.getElementById('lock-code').focus();
