@@ -76,7 +76,7 @@
   .dur-wrap { display: flex; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
   .dur-label { padding: 6px 12px; font-size: .82rem; color: var(--text-muted); border-right: 1px solid var(--border); }
   .dur-btn {
-    padding: 6px 12px; border: none; background: transparent;
+    padding: 6px 14px; border: none; background: transparent;
     font-family: 'DM Sans', sans-serif; font-size: .82rem; font-weight: 600;
     cursor: pointer; color: var(--text-muted); border-left: 1px solid var(--border);
     transition: all .2s;
@@ -108,7 +108,6 @@
   .cal-day.has-slots::before { content: ''; position: absolute; bottom: 3px; width: 5px; height: 5px; border-radius: 50%; background: var(--accent); opacity: .75; }
   .cal-day.selected.has-slots::before { background: #fff; }
   .cal-day.disabled { color: var(--text-muted); opacity: .4; cursor: not-allowed; }
-  /* ── Festivos ─────────────────────────────────────── */
   .cal-day.festivo { color: #C0392B !important; opacity: .6; cursor: not-allowed; font-style: italic; }
   .cal-day[data-tip] { overflow: visible; z-index: 1; }
   .cal-day[data-tip]:hover::before {
@@ -137,8 +136,7 @@
   .form-group select,
   .form-group textarea {
     padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px;
-    font-family: 'DM Sans', sans-serif; font-size: .92rem;
-    transition: all .2s;
+    font-family: 'DM Sans', sans-serif; font-size: .92rem; transition: all .2s;
   }
   .form-group input:focus,
   .form-group select:focus,
@@ -174,7 +172,6 @@
   @keyframes spin { to { transform: rotate(360deg); } }
 
   .loader { text-align: center; padding: 40px 20px; color: var(--text-muted); }
-
   .alert { padding: 12px 16px; border-radius: 8px; margin: 12px 0; font-size: .9rem; }
   .alert-error   { background: #FDECEA; color: #C0392B; border: 1px solid #F5C6CB; }
   .alert-info    { background: #EBF5FB; color: #1B4F72; border: 1px solid #AED6F1; }
@@ -223,10 +220,10 @@
   </div>
 
   <div class="info-bar">
-    <div class="info-chip">&#128336; <span>07:00&#8211;11:00</span> y <span>14:00&#8211;17:00</span></div>
-    <div class="info-chip">&#128197; <span>Lunes a Viernes</span></div>
+    <div class="info-chip">&#128336; <span id="horario-chip">07:00&#8211;17:00</span></div>
+    <div class="info-chip">&#128197; <span id="dias-chip">Lunes a Viernes</span></div>
     <div class="dur-wrap">
-      <span class="dur-label">&#9200; Duraci&#243;n</span>
+      <span class="dur-label">&#9200; Tipo de servicio</span>
       <div id="dur-btns-container"></div>
     </div>
   </div>
@@ -339,7 +336,7 @@
 </div>
 
 <footer>
-  <strong>AgendaTuCita</strong> &middot; <span id="footer-name"></span> &middot; <span id="footer-profession"></span> &middot; <span id="footer-city"></span><br>
+  <strong>AgendaTuCita</strong> &middot; <span id="footer-name"></span> &middot; <span id="footer-profession"></span> &middot; <span id="footer-city"></span>
 </footer>
 
 <script>
@@ -361,26 +358,25 @@ function getQueryParams() {
     pm_enabled:  params.get('pm_enabled') !== '0',
     pm_start:    params.get('pm_start')    || '14:00',
     pm_end:      params.get('pm_end')      || '17:00',
-    duration:    params.get('duration') || '1.5,2.5,3.5',
-    buffer:      parseInt(params.get('buffer') || '0'),
-    city:        params.get('city') || 'Colombia'
+    duration:    params.get('duration')    || '1,2',
+    city:        params.get('city')        || 'Colombia'
   };
 }
 
 var config = getQueryParams();
 
 // ══ APLICAR CONFIGURACIÓN ══════════════════════════════
-document.documentElement.style.setProperty('--primary', config.primary);
+document.documentElement.style.setProperty('--primary',    config.primary);
 document.documentElement.style.setProperty('--primary-lt', lighten(config.primary, 20));
-document.documentElement.style.setProperty('--accent', config.accent);
-document.documentElement.style.setProperty('--accent-dk', darken(config.accent, 15));
-document.documentElement.style.setProperty('--gold', config.gold);
+document.documentElement.style.setProperty('--accent',     config.accent);
+document.documentElement.style.setProperty('--accent-dk',  darken(config.accent, 15));
+document.documentElement.style.setProperty('--gold',       config.gold);
 
 document.getElementById('header-profession').textContent = config.profession;
-document.getElementById('header-badge').textContent = config.name + ' \u00b7 ' + config.city;
-document.getElementById('footer-name').textContent = config.name;
+document.getElementById('header-badge').textContent      = config.name + ' \u00b7 ' + config.city;
+document.getElementById('footer-name').textContent       = config.name;
 document.getElementById('footer-profession').textContent = config.profession;
-document.getElementById('footer-city').textContent = config.city;
+document.getElementById('footer-city').textContent       = config.city;
 
 // ══ CONFIGURACIÓN ══════════════════════════════════════
 const API_KEY     = config.api_key;
@@ -388,56 +384,42 @@ const CALENDAR_ID = config.email;
 const APPS_SCRIPT = config.apps_script;
 const OWNER_EMAIL = config.email;
 const OWNER_NAME  = config.name;
-const WORK_DAYS    = config.days.split(',').map(Number);
-const BUFFER_MINS  = config.buffer;
-const DURATIONS    = config.duration.split(',').map(Number);
-const DEFAULT_DUR  = DURATIONS[0];
+const WORK_DAYS   = config.days.split(',').map(Number);
+const BUFFER_MINS = 60; // ── Tiempo entre citas: fijo 1 hora ──
+const DURATIONS   = config.duration.split(',').map(Number);
+const DEFAULT_DUR = DURATIONS[0];
+
+// ══ TIPOS DE SERVICIO ══════════════════════════════════
+// 1 hora = Capacitación | 2 horas = Asesoría
+const SERVICE_TYPES = {
+  1: { icon: '\uD83D\uDCDA', title: 'Capacitaci\u00f3n',    desc: 'Sesi\u00f3n de formaci\u00f3n y entrenamiento (1 hora)' },
+  2: { icon: '\uD83D\uDCBC', title: 'Asesor\u00eda',         desc: 'Consulta y orientaci\u00f3n especializada (2 horas)' },
+  3: { icon: '\uD83D\uDD0D', title: 'Inspecci\u00f3n',       desc: 'Visita de inspecci\u00f3n con an\u00e1lisis en sitio (3 horas)' },
+  1.5: { icon: '\uD83D\uDCDA', title: 'Capacitaci\u00f3n',  desc: 'Sesi\u00f3n de formaci\u00f3n (1h 30min)' },
+  2.5: { icon: '\uD83D\uDCBC', title: 'Asesor\u00eda',       desc: 'Consulta especializada (2h 30min)' },
+  3.5: { icon: '\uD83D\uDD0D', title: 'Inspecci\u00f3n',     desc: 'Visita de inspecci\u00f3n (3h 30min)' }
+};
 
 // ══ FESTIVOS COLOMBIA 2026 – 2027 ══════════════════════
 var FESTIVOS_CO = {
-  /* 2026 */
-  '2026-01-01': 'A\u00f1o Nuevo',
-  '2026-01-12': 'Reyes Magos',
-  '2026-03-23': 'San Jos\u00e9',
-  '2026-04-02': 'Jueves Santo',
-  '2026-04-03': 'Viernes Santo',
-  '2026-05-01': 'D\u00eda del Trabajo',
-  '2026-05-18': 'Ascensi\u00f3n del Se\u00f1or',
-  '2026-06-08': 'Corpus Christi',
-  '2026-06-15': 'Sagrado Coraz\u00f3n',
-  '2026-06-29': 'San Pedro y San Pablo',
-  '2026-07-20': 'Independencia de Colombia',
-  '2026-08-07': 'Batalla de Boyac\u00e1',
-  '2026-08-17': 'Asunci\u00f3n de la Virgen',
-  '2026-10-12': 'D\u00eda de la Raza',
-  '2026-11-02': 'Todos los Santos',
-  '2026-11-16': 'Independencia de Cartagena',
-  '2026-12-08': 'Inmaculada Concepci\u00f3n',
-  '2026-12-25': 'Navidad',
-  /* 2027 */
-  '2027-01-01': 'A\u00f1o Nuevo',
-  '2027-01-11': 'Reyes Magos',
-  '2027-03-22': 'San Jos\u00e9',
-  '2027-03-25': 'Jueves Santo',
-  '2027-03-26': 'Viernes Santo',
-  '2027-05-01': 'D\u00eda del Trabajo',
-  '2027-05-10': 'Ascensi\u00f3n del Se\u00f1or',
-  '2027-05-31': 'Corpus Christi',
-  '2027-06-07': 'Sagrado Coraz\u00f3n',
-  '2027-06-28': 'San Pedro y San Pablo',
-  '2027-07-20': 'Independencia de Colombia',
-  '2027-08-07': 'Batalla de Boyac\u00e1',
-  '2027-08-16': 'Asunci\u00f3n de la Virgen',
-  '2027-10-18': 'D\u00eda de la Raza',
-  '2027-11-01': 'Todos los Santos',
-  '2027-11-15': 'Independencia de Cartagena',
-  '2027-12-08': 'Inmaculada Concepci\u00f3n',
-  '2027-12-25': 'Navidad'
+  '2026-01-01':'A\u00f1o Nuevo','2026-01-12':'Reyes Magos','2026-03-23':'San Jos\u00e9',
+  '2026-04-02':'Jueves Santo','2026-04-03':'Viernes Santo','2026-05-01':'D\u00eda del Trabajo',
+  '2026-05-18':'Ascensi\u00f3n del Se\u00f1or','2026-06-08':'Corpus Christi',
+  '2026-06-15':'Sagrado Coraz\u00f3n','2026-06-29':'San Pedro y San Pablo',
+  '2026-07-20':'Independencia de Colombia','2026-08-07':'Batalla de Boyac\u00e1',
+  '2026-08-17':'Asunci\u00f3n de la Virgen','2026-10-12':'D\u00eda de la Raza',
+  '2026-11-02':'Todos los Santos','2026-11-16':'Independencia de Cartagena',
+  '2026-12-08':'Inmaculada Concepci\u00f3n','2026-12-25':'Navidad',
+  '2027-01-01':'A\u00f1o Nuevo','2027-01-11':'Reyes Magos','2027-03-22':'San Jos\u00e9',
+  '2027-03-25':'Jueves Santo','2027-03-26':'Viernes Santo','2027-05-01':'D\u00eda del Trabajo',
+  '2027-05-10':'Ascensi\u00f3n del Se\u00f1or','2027-05-31':'Corpus Christi',
+  '2027-06-07':'Sagrado Coraz\u00f3n','2027-06-28':'San Pedro y San Pablo',
+  '2027-07-20':'Independencia de Colombia','2027-08-07':'Batalla de Boyac\u00e1',
+  '2027-08-16':'Asunci\u00f3n de la Virgen','2027-10-18':'D\u00eda de la Raza',
+  '2027-11-01':'Todos los Santos','2027-11-15':'Independencia de Cartagena',
+  '2027-12-08':'Inmaculada Concepci\u00f3n','2027-12-25':'Navidad'
 };
-
-function esFestivo(date) {
-  return FESTIVOS_CO[toDateStr(date)] || null;
-}
+function esFestivo(date) { return FESTIVOS_CO[toDateStr(date)] || null; }
 
 // ══ HORARIOS BASE ══════════════════════════════════════
 function buildSlots(startTime, endTime, dur) {
@@ -449,13 +431,12 @@ function buildSlots(startTime, endTime, dur) {
   var startTotal = startH * 60 + startM;
   var endTotal   = endH * 60 + endM;
   var durMins    = Math.round(dur * 60);
-  var bufMins    = BUFFER_MINS;
   var cur = startTotal;
   while (cur + durMins <= endTotal) {
     var h = Math.floor(cur / 60);
     var m = cur % 60;
     slots.push((h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m);
-    cur += durMins + bufMins;
+    cur += durMins + BUFFER_MINS; // ── 1 hora de buffer entre citas ──
   }
   return slots;
 }
@@ -465,19 +446,22 @@ function getPM(dur) { return config.pm_enabled ? buildSlots(config.pm_start, con
 function getAllH(dur) { return [...getAM(dur), ...getPM(dur)]; }
 
 function endHour(h, dur) {
-  var parts = h.split(':');
+  var parts     = h.split(':');
   var totalMins = parseInt(parts[0]) * 60 + parseInt(parts[1]) + Math.round(dur * 60);
   var hr  = Math.floor(totalMins / 60);
   var min = totalMins % 60;
   return (hr < 10 ? '0' : '') + hr + ':' + (min < 10 ? '0' : '') + min;
 }
 
-// ══ TIPOS DE SERVICIO ══════════════════════════════════
-const SERVICE_TYPES = {
-  1.5: { icon: '\u{1F4DA}', title: 'Capacitaci\u00f3n',           desc: 'Sesi\u00f3n de formaci\u00f3n y entrenamiento (1h 30min)' },
-  2.5: { icon: '\u{1F4BC}', title: 'Asesor\u00eda',               desc: 'Consulta y orientaci\u00f3n especializada (2h 30min)' },
-  3.5: { icon: '\u{1F50D}', title: 'Inspecci\u00f3n y/o Asesor\u00eda', desc: 'Visita de inspecci\u00f3n con an\u00e1lisis en sitio (3h 30min)' }
-};
+function durStr(d) {
+  if (d === 1)   return '1 hora';
+  if (d === 2)   return '2 horas';
+  if (d === 3)   return '3 horas';
+  if (d === 1.5) return '1h 30min';
+  if (d === 2.5) return '2h 30min';
+  if (d === 3.5) return '3h 30min';
+  return d + ' horas';
+}
 
 // ══ UTILIDADES DE COLOR ════════════════════════════════
 function lighten(color, percent) {
@@ -486,26 +470,21 @@ function lighten(color, percent) {
   var R = (num >> 16) + amt;
   var G = (num >> 8 & 0x00FF) + amt;
   var B = (num & 0x0000FF) + amt;
-  return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 +
-    (G<255?G<1?0:G:255)*0x100+(B<255?B<1?0:B:255))
-    .toString(16).slice(1);
+  return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100+(B<255?B<1?0:B:255)).toString(16).slice(1);
 }
 function darken(color, percent) { return lighten(color, -percent); }
 
-// ══ FECHAS EN ESPAÑOL (100% manual, sin depender del locale) ══
+// ══ FECHAS EN ESPAÑOL ═════════════════════════════════
 var DIAS_ES  = ['domingo','lunes','martes','mi\u00e9rcoles','jueves','viernes','s\u00e1bado'];
 var MESES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
 
 function spanishDate(d) {
   return cap(DIAS_ES[d.getDay()]) + ', ' + d.getDate() + ' de ' + MESES_ES[d.getMonth()] + ' de ' + d.getFullYear();
 }
-
-// Recibe "2026-08-07T07:00:00" o "2026-08-07" y devuelve fecha en español
 function formatDateES(isoStr) {
   var p = isoStr.substring(0,10).split('-');
   return spanishDate(new Date(parseInt(p[0]), parseInt(p[1])-1, parseInt(p[2])));
 }
-
 function formatTime(isoStr) {
   var p = isoStr.split('T');
   if (p.length > 1) return p[1].substring(0,5);
@@ -521,7 +500,7 @@ var busySlots    = {};
 var formData     = {};
 
 // ══ INIT ═══════════════════════════════════════════════
-const DUR_LABELS = { 1.5: '1h30', 2.5: '2h30', 3.5: '3h30' };
+const DUR_LABELS = { 1: '1h', 2: '2h', 3: '3h', 1.5: '1h30', 2.5: '2h30', 3.5: '3h30' };
 var durContainer = document.getElementById('dur-btns-container');
 DURATIONS.forEach(function(d, i) {
   var btn = document.createElement('button');
@@ -538,10 +517,7 @@ showServiceInfo(DEFAULT_DUR);
 function setDuration(h) {
   sessionDur = h;
   document.querySelectorAll('.dur-btn').forEach(function(b) {
-    b.classList.toggle('active', parseFloat(b.textContent) === h ||
-      (h === 1.5 && b.textContent === '1h30') ||
-      (h === 2.5 && b.textContent === '2h30') ||
-      (h === 3.5 && b.textContent === '3h30'));
+    b.classList.toggle('active', b.textContent === (DUR_LABELS[h] || h + 'h'));
   });
   showServiceInfo(h);
   selectedHour = null;
@@ -561,16 +537,12 @@ function showServiceInfo(dur) {
 }
 
 // ══ CALENDARIO ═════════════════════════════════════════
-function isWorkDay(date) {
-  return WORK_DAYS.includes(date.getDay());
-}
+function isWorkDay(date) { return WORK_DAYS.includes(date.getDay()); }
 
 function renderCalendar() {
   var y = currentDate.getFullYear();
   var m = currentDate.getMonth();
-  // Nombre del mes en español manual
-  document.getElementById('month-label').textContent =
-    cap(MESES_ES[m]) + ' ' + y;
+  document.getElementById('month-label').textContent = cap(MESES_ES[m]) + ' ' + y;
 
   var grid = document.getElementById('calendar');
   grid.innerHTML = '';
@@ -582,7 +554,7 @@ function renderCalendar() {
     grid.appendChild(h);
   });
 
-  var firstDay = new Date(y, m, 1).getDay();
+  var firstDay   = new Date(y, m, 1).getDay();
   var startOffset = firstDay === 0 ? 6 : firstDay - 1;
   var daysInMonth = new Date(y, m + 1, 0).getDate();
   var today = new Date(); today.setHours(0,0,0,0);
@@ -593,32 +565,27 @@ function renderCalendar() {
 
   for (var d = 1; d <= daysInMonth; d++) {
     (function(day) {
-      var date = new Date(y, m, day);
-      var cell = document.createElement('div');
+      var date    = new Date(y, m, day);
+      var cell    = document.createElement('div');
       cell.className = 'cal-day';
       cell.textContent = day;
-
       var festivo = esFestivo(date);
 
       if (date < today || !isWorkDay(date)) {
         cell.classList.add('disabled');
       } else if (festivo) {
-        // Día festivo: bloqueado en rojo con tooltip
-        cell.classList.add('disabled');
-        cell.classList.add('festivo');
+        cell.classList.add('disabled','festivo');
         cell.setAttribute('data-tip', festivo);
       } else {
         if (date.getTime() === today.getTime()) cell.classList.add('today');
         if (selectedDate && selectedDate.getTime() === date.getTime()) cell.classList.add('selected');
         cell.classList.add('available');
-        // Mostrar punto verde si el día tiene al menos un slot libre
-        var dStr   = toDateStr(date);
-        var busy   = busySlots[dStr] || [];
-        var total  = getAllH(sessionDur).length;
+        var dStr  = toDateStr(date);
+        var busy  = busySlots[dStr] || [];
+        var total = getAllH(sessionDur).length;
         if (total > 0 && busy.length < total) cell.classList.add('has-slots');
         cell.onclick = function() { selectDate(new Date(date)); };
       }
-
       grid.appendChild(cell);
     })(d);
   }
@@ -643,17 +610,15 @@ function selectDate(d) {
 
 function renderSlots(d) {
   var dateStr = toDateStr(d);
-  var busy = busySlots[dateStr] || [];
-  var avail = getAllH(sessionDur);
-  var html = '';
-
+  var busy    = busySlots[dateStr] || [];
+  var avail   = getAllH(sessionDur);
+  var html    = '';
   avail.forEach(function(h) {
     var isBusy = busy.includes(h);
     html += '<button class="slot-btn' + (isBusy ? ' busy' : '') + (h === selectedHour ? ' selected' : '') +
             '" ' + (isBusy ? 'disabled' : 'onclick="selectSlot(\'' + h + '\')"') + '>' + h + '</button>';
   });
-
-  document.getElementById('slots-container').innerHTML = html;
+  document.getElementById('slots-container').innerHTML = html || '<div class="alert alert-info">No hay horarios disponibles para este d\u00eda.</div>';
 }
 
 function selectSlot(h) {
@@ -662,6 +627,7 @@ function selectSlot(h) {
   document.getElementById('btn-next1').disabled = false;
 }
 
+// ══ CARGA DE DISPONIBILIDAD con detección de BLOQUEOS ═
 function loadMonthBusy(y, m) {
   var monthStart = new Date(y, m, 1);
   var monthEnd   = new Date(y, m + 1, 0);
@@ -671,37 +637,54 @@ function loadMonthBusy(y, m) {
         '&timeMin=' + monthStart.toISOString() +
         '&timeMax=' + monthEnd.toISOString() +
         '&singleEvents=true&orderBy=startTime')
-    .then(r => r.json())
-    .then(data => {
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
       busySlots = {};
       if (data.items) {
         data.items.forEach(function(evt) {
-          var start = new Date(evt.start.dateTime);
-          var dateStr = toDateStr(start);
-          var h = String(start.getHours()).padStart(2,'0') + ':00';
+          if (!evt.start || !evt.start.dateTime) return;
+          var title   = (evt.summary || '').toUpperCase();
+          var evStart = new Date(evt.start.dateTime);
+          var evEnd   = evt.end && evt.end.dateTime ? new Date(evt.end.dateTime) : new Date(evStart.getTime() + 3600000);
+          var dateStr = toDateStr(evStart);
           if (!busySlots[dateStr]) busySlots[dateStr] = [];
-          busySlots[dateStr].push(h);
+
+          if (title.startsWith('BLOQUEADO') || title.startsWith('RESERVADO') || title.startsWith('DIA FESTIVO')) {
+            // ── Bloqueo por jornada: marcar todos los slots que se solapen ──
+            getAllH(sessionDur).forEach(function(slot) {
+              var parts     = slot.split(':');
+              var slotStart = new Date(evStart); slotStart.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+              var slotEnd   = new Date(slotStart.getTime() + Math.round(sessionDur * 60) * 60000);
+              if (slotStart < evEnd && slotEnd > evStart) {
+                if (!busySlots[dateStr].includes(slot)) busySlots[dateStr].push(slot);
+              }
+            });
+          } else {
+            // ── Cita normal: bloquear el slot exacto ──
+            var h = String(evStart.getHours()).padStart(2,'0') + ':' + String(evStart.getMinutes()).padStart(2,'0');
+            if (!busySlots[dateStr].includes(h)) busySlots[dateStr].push(h);
+          }
         });
       }
       renderCalendar();
       if (selectedDate) renderSlots(selectedDate);
     })
-    .catch(err => {
+    .catch(function() {
       document.getElementById('slots-container').innerHTML =
-        '<div class="alert alert-error">Error al cargar disponibilidad</div>';
+        '<div class="alert alert-error">Error al cargar disponibilidad. Verifica la conexi\u00f3n.</div>';
     });
 }
 
 // ══ PASOS ══════════════════════════════════════════════
 function updateSteps(step) {
-  ['step1','step2','step3'].forEach((s,i) => {
+  ['step1','step2','step3'].forEach(function(s, i) {
     document.getElementById(s).classList.toggle('active', s === 'step' + step);
     document.getElementById(s).classList.toggle('done', i < step - 1);
   });
-  ['line1','line2'].forEach((l,i) => {
+  ['line1','line2'].forEach(function(l, i) {
     document.getElementById(l).classList.toggle('done', i < step - 1);
   });
-  ['panel-step1','panel-step2','panel-step3'].forEach((p,i) => {
+  ['panel-step1','panel-step2','panel-step3'].forEach(function(p, i) {
     document.getElementById(p).style.display = (i + 1 === step) ? 'block' : 'none';
   });
 }
@@ -731,14 +714,14 @@ function goStep3() {
 
   var fmtDate = spanishDate(selectedDate);
   var summary =
-    '<div class="summary-row"><span class="summary-icon">\u{1F464}</span><span class="summary-label">Nombre</span><span class="summary-val">' + nombre + ' ' + apellido + '</span></div>' +
-    '<div class="summary-row"><span class="summary-icon">\u{1F4C5}</span><span class="summary-label">Fecha</span><span class="summary-val">' + cap(fmtDate) + '</span></div>' +
-    '<div class="summary-row"><span class="summary-icon">\u{1F550}</span><span class="summary-label">Hora</span><span class="summary-val">' + selectedHour + ' \u2013 ' + endHour(selectedHour, sessionDur) + '</span></div>' +
-    '<div class="summary-row"><span class="summary-icon">\u23f1</span><span class="summary-label">Duraci\u00f3n</span><span class="summary-val">' + (sessionDur === 1 ? '1 hora' : sessionDur === 2 ? '2 horas' : sessionDur === 3 ? '3 horas' : sessionDur === 1.5 ? '1h 30min' : sessionDur === 2.5 ? '2h 30min' : '3h 30min') + '</span></div>' +
-    '<div class="summary-row"><span class="summary-icon">\u{1F4DE}</span><span class="summary-label">Tel\u00e9fono</span><span class="summary-val">' + tel + '</span></div>' +
-    (formData.email ? '<div class="summary-row"><span class="summary-icon">\u{1F4E7}</span><span class="summary-label">Email</span><span class="summary-val">' + formData.email + '</span></div>' : '') +
+    '<div class="summary-row"><span class="summary-icon">\uD83D\uDC64</span><span class="summary-label">Nombre</span><span class="summary-val">' + nombre + ' ' + apellido + '</span></div>' +
+    '<div class="summary-row"><span class="summary-icon">\uD83D\uDCC5</span><span class="summary-label">Fecha</span><span class="summary-val">' + cap(fmtDate) + '</span></div>' +
+    '<div class="summary-row"><span class="summary-icon">\uD83D\uDD50</span><span class="summary-label">Hora</span><span class="summary-val">' + selectedHour + ' \u2013 ' + endHour(selectedHour, sessionDur) + '</span></div>' +
+    '<div class="summary-row"><span class="summary-icon">\u23F1</span><span class="summary-label">Servicio</span><span class="summary-val">' + (SERVICE_TYPES[sessionDur] ? SERVICE_TYPES[sessionDur].title + ' \u2014 ' : '') + durStr(sessionDur) + '</span></div>' +
+    '<div class="summary-row"><span class="summary-icon">\uD83D\uDCDE</span><span class="summary-label">Tel\u00e9fono</span><span class="summary-val">' + tel + '</span></div>' +
+    (formData.email ? '<div class="summary-row"><span class="summary-icon">\uD83D\uDCE7</span><span class="summary-label">Email</span><span class="summary-val">' + formData.email + '</span></div>' : '') +
     (formData.empresa ? '<div class="summary-row"><span class="summary-icon">&#127970;</span><span class="summary-label">Empresa</span><span class="summary-val">' + formData.empresa + '</span></div>' : '') +
-    '<div class="summary-row"><span class="summary-icon">\u{1F4CB}</span><span class="summary-label">Modalidad</span><span class="summary-val">' + formData.modalidad + '</span></div>';
+    '<div class="summary-row"><span class="summary-icon">\uD83D\uDCCB</span><span class="summary-label">Modalidad</span><span class="summary-val">' + formData.modalidad + '</span></div>';
   document.getElementById('full-summary').innerHTML = summary;
   updateSteps(3);
   window.scrollTo({top:0,behavior:'smooth'});
@@ -755,8 +738,8 @@ emailjs.init(EMAILJS_PUBLIC_KEY);
 async function enviarCorreos(payload) {
   var startISO = payload.start_time;
   var endISO   = payload.end_time;
-  var durH     = sessionDur;
-  var durStr   = durH === 1 ? '1 hora' : durH === 2 ? '2 horas' : durH === 3 ? '3 horas' : durH === 1.5 ? '1h 30min' : durH === 2.5 ? '2h 30min' : '3h 30min';
+  var dStr     = durStr(sessionDur);
+  var svcTitle = SERVICE_TYPES[sessionDur] ? SERVICE_TYPES[sessionDur].title + ' - ' + dStr : dStr;
 
   var params = {
     to_email:         payload.client_email,
@@ -767,7 +750,7 @@ async function enviarCorreos(payload) {
     meeting_date:     formatDateES(startISO),
     meeting_start:    formatTime(startISO),
     meeting_end:      formatTime(endISO),
-    meeting_duration: durStr,
+    meeting_duration: svcTitle,
     meeting_reason:   payload.meeting_reason,
     meeting_type:     payload.meeting_type,
     owner_name:       payload.owner_name,
@@ -777,15 +760,13 @@ async function enviarCorreos(payload) {
   };
 
   if (payload.client_email) {
-    try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_CLIENTE, params);
-    } catch(e) { console.warn('Error correo cliente:', e); }
+    try { await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_CLIENTE, params); }
+    catch(e) { console.warn('Error correo cliente:', e); }
   }
 
   var paramsOwner = Object.assign({}, params, { to_email: payload.owner_email });
-  try {
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_OWNER, paramsOwner);
-  } catch(e) { console.warn('Error correo owner:', e); }
+  try { await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_OWNER, paramsOwner); }
+  catch(e) { console.warn('Error correo owner:', e); }
 }
 
 async function confirmarCita() {
@@ -815,14 +796,8 @@ async function confirmarCita() {
   };
 
   try {
-    await fetch(APPS_SCRIPT, {
-      method: 'POST',
-      mode: 'no-cors',
-      body: JSON.stringify(payload)
-    });
-
+    await fetch(APPS_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
     await enviarCorreos(payload);
-
     if (!busySlots[dateStr]) busySlots[dateStr] = [];
     busySlots[dateStr].push(selectedHour);
     mostrarExito(nombre);
@@ -834,16 +809,15 @@ async function confirmarCita() {
 }
 
 function mostrarExito(nombre) {
-  hide('booking-screen');
-  hide('steps-bar');
+  hide('booking-screen'); hide('steps-bar');
   var ss = document.getElementById('success-screen');
   ss.style.display = 'block';
   var fmtDate = spanishDate(selectedDate);
   document.getElementById('success-details').innerHTML =
-    '<div class="summary-row"><span class="summary-icon">\u{1F464}</span><span class="summary-label">Cliente</span><span class="summary-val">' + nombre + '</span></div>' +
-    '<div class="summary-row"><span class="summary-icon">\u{1F4C5}</span><span class="summary-label">Fecha</span><span class="summary-val">' + cap(fmtDate) + '</span></div>' +
-    '<div class="summary-row"><span class="summary-icon">\u{1F550}</span><span class="summary-label">Hora</span><span class="summary-val">' + selectedHour + ' \u2013 ' + endHour(selectedHour, sessionDur) + '</span></div>' +
-    '<div class="summary-row"><span class="summary-icon">\u23f1</span><span class="summary-label">Duraci\u00f3n</span><span class="summary-val">' + (sessionDur === 1 ? '1 hora' : sessionDur === 2 ? '2 horas' : sessionDur === 3 ? '3 horas' : sessionDur === 1.5 ? '1h 30min' : sessionDur === 2.5 ? '2h 30min' : '3h 30min') + '</span></div>';
+    '<div class="summary-row"><span class="summary-icon">\uD83D\uDC64</span><span class="summary-label">Cliente</span><span class="summary-val">' + nombre + '</span></div>' +
+    '<div class="summary-row"><span class="summary-icon">\uD83D\uDCC5</span><span class="summary-label">Fecha</span><span class="summary-val">' + cap(fmtDate) + '</span></div>' +
+    '<div class="summary-row"><span class="summary-icon">\uD83D\uDD50</span><span class="summary-label">Hora</span><span class="summary-val">' + selectedHour + ' \u2013 ' + endHour(selectedHour, sessionDur) + '</span></div>' +
+    '<div class="summary-row"><span class="summary-icon">\u23F1</span><span class="summary-label">Servicio</span><span class="summary-val">' + (SERVICE_TYPES[sessionDur] ? SERVICE_TYPES[sessionDur].title + ' \u2014 ' : '') + durStr(sessionDur) + '</span></div>';
   ss.scrollIntoView({behavior:'smooth'});
 }
 

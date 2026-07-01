@@ -104,7 +104,7 @@ input[type=date]{padding:5px 9px;border:1px solid var(--border);border-radius:7p
 .prox-nombre{font-size:.8rem;font-weight:600;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
 /* BLOQUEAR DÍAS */
-.block-form{display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;padding:14px 18px;align-items:end}
+.block-form{display:grid;grid-template-columns:1fr 1fr 1fr 1fr auto;gap:10px;padding:14px 18px;align-items:end}
 @media(max-width:640px){.block-form{grid-template-columns:1fr}}
 .block-form label{font-size:.75rem;font-weight:600;color:var(--primary);margin-bottom:4px;display:block}
 .block-input{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:.88rem;width:100%}
@@ -313,6 +313,13 @@ footer strong{color:var(--primary)}
           <div class="block-form">
             <div><label>Desde</label><input type="date" id="block-desde" class="block-input"></div>
             <div><label>Hasta</label><input type="date" id="block-hasta" class="block-input"></div>
+            <div><label>Jornada</label>
+              <select id="block-jornada" class="block-input">
+                <option value="completo">&#128683; D&iacute;a completo</option>
+                <option value="manana">&#9728;&#65039; Solo ma&ntilde;ana</option>
+                <option value="tarde">&#127774; Solo tarde</option>
+              </select>
+            </div>
             <div><label>Motivo</label><input type="text" id="block-motivo" class="block-input" placeholder="Vacaciones, festivo&#8230;"></div>
             <button class="btn-block" onclick="bloquearDias()">&#128683; Bloquear</button>
           </div>
@@ -740,24 +747,36 @@ async function cancelarCita(){
   }
 }
 
-// BLOQUEAR DÍAS
+// BLOQUEAR DÍAS con jornada
 async function bloquearDias(){
   var desde=document.getElementById('block-desde').value;
   var hasta=document.getElementById('block-hasta').value;
   var motivo=document.getElementById('block-motivo').value||'No disponible';
+  var jornada=document.getElementById('block-jornada').value;
   var resDiv=document.getElementById('block-result');
   if(!desde||!hasta){resDiv.className='block-result err';resDiv.style.display='block';resDiv.textContent='&#9888;&#65039; Selecciona fecha de inicio y fin.';return;}
   resDiv.style.display='none';
+
+  // Horas según jornada
+  var startHour=6, endHour=23, endMin=59;
+  if(jornada==='manana'){startHour=6;endHour=12;endMin=0;}
+  else if(jornada==='tarde'){startHour=12;endHour=23;endMin=59;}
+
+  var jornadaLabel = jornada==='manana'?'mañana':jornada==='tarde'?'tarde':'día completo';
+
   try{
     await fetch(CFG.apps_script,{method:'POST',mode:'no-cors',body:JSON.stringify({
       action:'block_date',
       calendar_id:CFG.email,
       start_date:desde,
       end_date:hasta,
-      reason:motivo
+      reason:motivo+' ('+jornadaLabel+')',
+      block_start_hour:startHour,
+      block_end_hour:endHour,
+      block_end_min:endMin
     })});
     resDiv.className='block-result ok';resDiv.style.display='block';
-    resDiv.textContent='\u2705 D\u00edas bloqueados correctamente. Los cambios aparecer\u00e1n en el calendario en unos segundos.';
+    resDiv.textContent='\u2705 '+cap(jornadaLabel)+' bloqueada correctamente. Los cambios aparecer\u00e1n en el calendario en unos segundos.';
     document.getElementById('block-desde').value='';
     document.getElementById('block-hasta').value='';
     document.getElementById('block-motivo').value='';
