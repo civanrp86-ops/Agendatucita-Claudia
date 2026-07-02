@@ -643,27 +643,21 @@ function loadMonthBusy(y, m) {
       if (data.items) {
         data.items.forEach(function(evt) {
           if (!evt.start || !evt.start.dateTime) return;
-          var title   = (evt.summary || '').toUpperCase();
           var evStart = new Date(evt.start.dateTime);
           var evEnd   = evt.end && evt.end.dateTime ? new Date(evt.end.dateTime) : new Date(evStart.getTime() + 3600000);
           var dateStr = toDateStr(evStart);
           if (!busySlots[dateStr]) busySlots[dateStr] = [];
 
-          if (title.startsWith('BLOQUEADO') || title.startsWith('RESERVADO') || title.startsWith('DIA FESTIVO')) {
-            // ── Bloqueo por jornada: marcar todos los slots que se solapen ──
-            getAllH(sessionDur).forEach(function(slot) {
-              var parts     = slot.split(':');
-              var slotStart = new Date(evStart); slotStart.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
-              var slotEnd   = new Date(slotStart.getTime() + Math.round(sessionDur * 60) * 60000);
-              if (slotStart < evEnd && slotEnd > evStart) {
-                if (!busySlots[dateStr].includes(slot)) busySlots[dateStr].push(slot);
-              }
-            });
-          } else {
-            // ── Cita normal: bloquear el slot exacto ──
-            var h = String(evStart.getHours()).padStart(2,'0') + ':' + String(evStart.getMinutes()).padStart(2,'0');
-            if (!busySlots[dateStr].includes(h)) busySlots[dateStr].push(h);
-          }
+          // ── Cualquier evento (cita, bloqueo o evento manual) bloquea
+          //    todos los slots que se solapen con su duración ──
+          getAllH(sessionDur).forEach(function(slot) {
+            var parts     = slot.split(':');
+            var slotStart = new Date(evStart); slotStart.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
+            var slotEnd   = new Date(slotStart.getTime() + Math.round(sessionDur * 60) * 60000);
+            if (slotStart < evEnd && slotEnd > evStart) {
+              if (!busySlots[dateStr].includes(slot)) busySlots[dateStr].push(slot);
+            }
+          });
         });
       }
       renderCalendar();
