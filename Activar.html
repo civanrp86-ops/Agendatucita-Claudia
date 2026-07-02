@@ -213,17 +213,13 @@
           <label>Hasta</label><input type="time" id="pm-end" value="18:00">
         </div>
       </div>
-      <label style="font-size:.82rem;font-weight:600;color:var(--primary);margin:16px 0 4px;display:block">Duraci&oacute;n de cada cita * <span style="font-weight:400;color:var(--text-muted)">(puedes elegir varias)</span></label>
+      <label style="font-size:.82rem;font-weight:600;color:var(--primary);margin:16px 0 4px;display:block">Tipo de servicio * <span style="font-weight:400;color:var(--text-muted)">(puedes elegir varios)</span></label>
       <div class="dur-chips">
-        <div class="dur-chip active" data-dur="1">1 hora</div>
-        <div class="dur-chip" data-dur="2">2 horas</div>
-        <div class="dur-chip" data-dur="3">3 horas</div>
+        <div class="dur-chip active" data-dur="1">&#128218; Capacitaci&oacute;n &middot; 1 hora</div>
+        <div class="dur-chip" data-dur="2">&#128188; Asesor&iacute;a &middot; 2 horas</div>
       </div>
-      <label style="font-size:.82rem;font-weight:600;color:var(--primary);margin:16px 0 4px;display:block">Tiempo entre citas</label>
-      <div class="buffer-opts">
-        <button class="buf-btn active" data-buf="0">Sin pausa</button>
-        <button class="buf-btn" data-buf="15">15 min</button>
-        <button class="buf-btn" data-buf="30">30 min</button>
+      <div style="background:#EBF5FB;border:1px solid #AED6F1;border-radius:8px;padding:10px 14px;margin-top:12px;font-size:.8rem;color:#1B4F72">
+        &#8505;&#65039; El tiempo entre citas es de <strong>1 hora fija</strong> para desplazamientos y preparaci&oacute;n.
       </div>
       <div id="err2"></div>
       <div class="btn-row">
@@ -424,12 +420,6 @@ PALETAS.forEach(function(p,i){
 
 document.querySelectorAll('.day-chip').forEach(function(c){c.onclick=function(){c.classList.toggle('active');};});
 document.querySelectorAll('.dur-chip').forEach(function(c){c.onclick=function(){c.classList.toggle('active');};});
-document.querySelectorAll('.buf-btn').forEach(function(b){
-  b.onclick=function(){
-    document.querySelectorAll('.buf-btn').forEach(function(x){x.classList.remove('active');});
-    b.classList.add('active');
-  };
-});
 
 function togglePM(){
   document.getElementById('pm-panel').style.display = document.getElementById('pm-toggle').checked?'block':'none';
@@ -489,7 +479,7 @@ function generateLinks(){
   var pmEnd   = document.getElementById('pm-end').value;
   var days=[]; document.querySelectorAll('.day-chip.active').forEach(function(c){days.push(c.dataset.day);});
   var durs=[]; document.querySelectorAll('.dur-chip.active').forEach(function(c){durs.push(c.dataset.dur);});
-  var buf=0; var bb=document.querySelector('.buf-btn.active'); if(bb) buf=bb.dataset.buf;
+  var buf=60; // Buffer fijo: 1 hora entre citas
   var pal = PALETAS[selectedPaleta];
 
   // Ciudad completa = Ciudad, Departamento
