@@ -489,17 +489,15 @@ function generateLinks(){
   var loc  = window.location.href.split('?')[0];
   var base = loc.substring(0, loc.lastIndexOf('/') + 1);
 
-  // Credenciales fijas del producto
-  var PROD_APPS_SCRIPT = 'https://script.google.com/macros/s/AKfycbxpQuKx1AEXob52aMiWQF9dZ_PVkJCd-fhs1hUUU4TTtY0C1YZAUu6laqlQ0PqEQcV8/exec';
-  var PROD_API_KEY     = 'AIzaSyDVynTeTFMHDi1VB-7DouJSLAsRAZ9S7JA';
+  // NOTA: api_key y apps_script ya NO van en los links.
+  // Viven como defaults dentro de agendar.html, admin.html e inicio.html.
+  // Así, actualizar los archivos en GitHub actualiza a todos los clientes.
 
   // ── LINK PÁGINA DE INICIO (inicio.html) ──────────
   var paramsInicio = new URLSearchParams({
     name:nombre, profession:prof,
     email:email,
     city:ciudad, department:depto,
-    api_key:PROD_API_KEY,
-    apps_script:PROD_APPS_SCRIPT,
     am_start:amStart, am_end:amEnd,
     pm_enabled:pmOn?'1':'0', pm_start:pmStart, pm_end:pmEnd,
     days:days.join(','), duration:durs.join(','), buffer:buf,
@@ -512,8 +510,6 @@ function generateLinks(){
     name:nombre,
     email:email,
     city:cityFull,
-    api_key:PROD_API_KEY,
-    apps_script:PROD_APPS_SCRIPT,
     primary:pal.primary, accent:pal.accent, gold:pal.gold
   });
   document.getElementById('admin-link').value = base + 'admin.html?' + paramsAdmin.toString();
