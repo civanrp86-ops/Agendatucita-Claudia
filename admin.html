@@ -459,7 +459,7 @@ footer strong{color:var(--primary)}
 const ACCESS_CODE = "Claudia1";
 // ════════════════════════════════════════════════════════
 
-function getParams(){var p=new URLSearchParams(window.location.search);return{email:p.get('email')||'',name:p.get('name')||'Profesional',api_key:p.get('api_key')||'AIzaSyDVynTeTFMHDi1VB-7DouJSLAsRAZ9S7JA',apps_script:p.get('apps_script')||'https://script.google.com/macros/s/AKfycbx5rcBRpX_UATvMAKeKgRxFffRRSX6xn93Xcm3efDY3U87kgzO6AZ4Mo1_vUzCCk14/exec',city:p.get('city')||'Colombia',primary:p.get('primary')||'#1B4F72',accent:p.get('accent')||'#1ABC9C',gold:p.get('gold')||'#C9A84C'};}
+function getParams(){var p=new URLSearchParams(window.location.search);return{email:p.get('email')||'',name:p.get('name')||'Profesional',api_key:p.get('api_key')||'AIzaSyDVynTeTFMHDi1VB-7DouJSLAsRAZ9S7JA',apps_script:p.get('apps_script')||'https://script.google.com/macros/s/AKfycbxpQuKx1AEXob52aMiWQF9dZ_PVkJCd-fhs1hUUU4TTtY0C1YZAUu6laqlQ0PqEQcV8/exec',city:p.get('city')||'Colombia',primary:p.get('primary')||'#1B4F72',accent:p.get('accent')||'#1ABC9C',gold:p.get('gold')||'#C9A84C'};}
 var CFG=getParams();
 
 document.documentElement.style.setProperty('--primary',CFG.primary);
