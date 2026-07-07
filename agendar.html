@@ -763,6 +763,7 @@ async function enviarCorreos(payload) {
   catch(e) { console.warn('Error correo owner:', e); }
 }
 
+// ══ CONFIRMAR CITA — YA LEE LA RESPUESTA REAL DEL BACKEND ══
 async function confirmarCita() {
   var btn    = document.getElementById('btn-confirm');
   var errDiv = document.getElementById('confirm-error');
@@ -790,7 +791,12 @@ async function confirmarCita() {
   };
 
   try {
-    await fetch(APPS_SCRIPT, { method: 'POST', mode: 'no-cors', body: JSON.stringify(payload) });
+    var resp = await fetch(APPS_SCRIPT, { method: 'POST', body: JSON.stringify(payload) });
+    var respData = await resp.json();
+    console.log('Respuesta del backend:', respData);
+    if (!respData.success) {
+      throw new Error(respData.message || 'El servidor no pudo crear la cita.');
+    }
     await enviarCorreos(payload);
     if (!busySlots[dateStr]) busySlots[dateStr] = [];
     busySlots[dateStr].push(selectedHour);
