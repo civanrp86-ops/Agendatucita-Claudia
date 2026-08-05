@@ -1,3 +1,6 @@
+
+
+Agendar · HTML
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -23,7 +26,7 @@
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
-
+ 
   header {
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-lt) 100%);
     color: #fff; padding: 32px 24px 28px; text-align: center; position: relative; overflow: hidden;
@@ -38,9 +41,9 @@
     display: inline-block; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
     border-radius: 20px; padding: 4px 14px; font-size: .78rem; margin-top: 10px; position: relative;
   }
-
+ 
   .container { max-width: 820px; margin: 0 auto; padding: 28px 16px 60px; }
-
+ 
   .card {
     background: var(--surface); border-radius: var(--radius); box-shadow: var(--shadow);
     padding: 28px; margin-bottom: 20px; border: 1px solid var(--border);
@@ -50,7 +53,7 @@
     color: var(--primary-lt); margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
   }
   .card-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-
+ 
   .steps { display: flex; justify-content: center; gap: 0; margin-bottom: 28px; }
   .step  { display: flex; align-items: center; gap: 8px; font-size: .82rem; color: var(--text-muted); font-weight: 500; }
   .step.active { color: var(--primary); }
@@ -64,7 +67,7 @@
   .step.done   .step-num { background: var(--accent);  border-color: var(--accent);  color: #fff; }
   .step-line { width: 40px; height: 2px; background: var(--border); margin: 0 4px; }
   .step-line.done { background: var(--accent); }
-
+ 
   .info-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 20px; }
   .info-chip {
     display: flex; align-items: center; gap: 6px; background: var(--surface);
@@ -72,7 +75,7 @@
     font-size: .82rem; color: var(--text-muted); font-weight: 500;
   }
   .info-chip span { color: var(--primary); font-weight: 600; }
-
+ 
   .dur-wrap { display: flex; align-items: center; background: var(--surface); border: 1px solid var(--border); border-radius: 20px; overflow: hidden; }
   .dur-label { padding: 6px 12px; font-size: .82rem; color: var(--text-muted); border-right: 1px solid var(--border); }
   .dur-btn {
@@ -84,7 +87,7 @@
   .dur-btn:first-of-type { border-left: none; }
   .dur-btn.active { background: var(--primary); color: #fff; }
   .dur-btn:hover:not(.active) { background: var(--bg); color: var(--primary); }
-
+ 
   .cal-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
   .cal-nav h3 { font-size: 1.05rem; font-weight: 600; color: var(--primary); text-transform: capitalize; }
   .btn-nav {
@@ -93,7 +96,7 @@
     color: var(--primary); font-size: 1.1rem; transition: all .2s;
   }
   .btn-nav:hover { background: var(--primary); color: #fff; border-color: var(--primary); }
-
+ 
   .cal-grid { display: grid; grid-template-columns: repeat(7,1fr); gap: 4px; }
   .cal-head { text-align: center; font-size: .7rem; font-weight: 600; color: var(--text-muted); padding: 6px 0; letter-spacing: .5px; text-transform: uppercase; }
   .cal-day {
@@ -117,7 +120,7 @@
     border-radius: 6px; pointer-events: none; z-index: 30;
     font-style: normal; font-weight: 500;
   }
-
+ 
   .slots-wrap { display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr)); gap: 8px; }
   .slot-btn {
     padding: 8px 4px; border: 1px solid var(--border); border-radius: 8px; background: var(--surface);
@@ -127,7 +130,7 @@
   .slot-btn:hover { border-color: var(--primary); background: var(--bg); }
   .slot-btn.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
   .slot-btn.busy { background: #F5F5F5; color: var(--text-muted); cursor: not-allowed; opacity: .6; }
-
+ 
   .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
   .form-group { display: flex; flex-direction: column; }
   .form-group.full { grid-column: 1 / -1; }
@@ -143,7 +146,7 @@
   .form-group textarea:focus {
     outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(27,79,114,.1);
   }
-
+ 
   .summary-box {
     background: var(--bg); border-radius: 8px; padding: 16px; margin-bottom: 16px;
     border: 1px solid var(--border);
@@ -156,7 +159,7 @@
   .summary-icon { font-size: 1.2rem; text-align: center; }
   .summary-label { color: var(--text-muted); font-weight: 500; }
   .summary-val { color: var(--primary); font-weight: 600; }
-
+ 
   .btn {
     padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer;
     font-family: 'DM Sans', sans-serif; font-size: .92rem; font-weight: 600;
@@ -167,15 +170,15 @@
   .btn-primary:disabled { opacity: .6; cursor: not-allowed; }
   .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--primary); }
   .btn-ghost:hover { border-color: var(--primary); background: var(--bg); }
-
+ 
   .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin .6s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
-
+ 
   .loader { text-align: center; padding: 40px 20px; color: var(--text-muted); }
   .alert { padding: 12px 16px; border-radius: 8px; margin: 12px 0; font-size: .9rem; }
   .alert-error   { background: #FDECEA; color: #C0392B; border: 1px solid #F5C6CB; }
   .alert-info    { background: #EBF5FB; color: #1B4F72; border: 1px solid #AED6F1; }
-
+ 
   .service-info {
     display: none; align-items: center; gap: 10px;
     background: linear-gradient(135deg, var(--primary) 0%, var(--primary-lt) 100%);
@@ -188,7 +191,7 @@
   .service-info .service-text strong { display: block; font-size: .95rem; }
   .service-info .service-text span { opacity: .85; font-size: .8rem; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(-6px); } to { opacity: 1; transform: translateY(0); } }
-
+ 
   .success-icon {
     width: 80px; height: 80px; border-radius: 50%; background: var(--accent);
     color: #fff; display: flex; align-items: center; justify-content: center;
@@ -196,21 +199,21 @@
   }
   .success-title { font-size: 1.6rem; font-weight: 600; color: var(--primary); text-align: center; margin-bottom: 12px; }
   .success-text { color: var(--text-muted); text-align: center; margin-bottom: 24px; }
-
+ 
   footer { text-align: center; padding: 20px; font-size: .78rem; color: var(--text-muted); border-top: 1px solid var(--border); margin-top: 40px; }
   footer strong { color: var(--primary); }
 </style>
 </head>
 <body>
-
+ 
 <header>
   <h1>&#128197; AgendaTuCita</h1>
   <p id="header-profession">Consultas Profesionales</p>
   <div class="badge-esp" id="header-badge"></div>
 </header>
-
+ 
 <div class="container">
-
+ 
   <div class="steps" id="steps-bar">
     <div class="step active" id="step1"><div class="step-num">1</div><span>Fecha y hora</span></div>
     <div class="step-line" id="line1"></div>
@@ -218,7 +221,7 @@
     <div class="step-line" id="line2"></div>
     <div class="step" id="step3"><div class="step-num">3</div><span>Confirmar</span></div>
   </div>
-
+ 
   <div class="info-bar">
     <div class="info-chip">&#128336; <span id="horario-chip">07:00&#8211;17:00</span></div>
     <div class="info-chip">&#128197; <span id="dias-chip">Lunes a Viernes</span></div>
@@ -227,7 +230,7 @@
       <div id="dur-btns-container"></div>
     </div>
   </div>
-
+ 
   <div class="service-info" id="service-info">
     <div class="service-icon" id="service-icon"></div>
     <div class="service-text">
@@ -235,9 +238,9 @@
       <span id="service-desc"></span>
     </div>
   </div>
-
+ 
   <div id="booking-screen">
-
+ 
     <!-- PASO 1 -->
     <div id="panel-step1">
       <div class="card">
@@ -249,7 +252,7 @@
         </div>
         <div class="cal-grid" id="calendar"></div>
       </div>
-
+ 
       <div class="card" id="slots-card" style="display:none">
         <div class="card-title">Horarios disponibles</div>
         <div id="slots-container">
@@ -260,7 +263,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- PASO 2 -->
     <div id="panel-step2" style="display:none">
       <div class="card">
@@ -306,7 +309,7 @@
         </div>
       </div>
     </div>
-
+ 
     <!-- PASO 3 -->
     <div id="panel-step3" style="display:none">
       <div class="card">
@@ -319,9 +322,9 @@
         </div>
       </div>
     </div>
-
+ 
   </div>
-
+ 
   <!-- ÉXITO -->
   <div id="success-screen" class="card" style="display:none;text-align:center">
     <div class="success-icon">&#10003;</div>
@@ -332,13 +335,13 @@
       <button class="btn btn-primary" onclick="reiniciar()">Agendar otra cita</button>
     </div>
   </div>
-
+ 
 </div>
-
+ 
 <footer>
   <strong>AgendaTuCita</strong> &middot; <span id="footer-name"></span> &middot; <span id="footer-profession"></span> &middot; <span id="footer-city"></span>
 </footer>
-
+ 
 <script>
 // ══ LEER PARÁMETROS DE URL ═════════════════════════════
 function getQueryParams() {
@@ -362,22 +365,22 @@ function getQueryParams() {
     city:        params.get('city')        || 'Colombia'
   };
 }
-
+ 
 var config = getQueryParams();
-
+ 
 // ══ APLICAR CONFIGURACIÓN ══════════════════════════════
 document.documentElement.style.setProperty('--primary',    config.primary);
 document.documentElement.style.setProperty('--primary-lt', lighten(config.primary, 20));
 document.documentElement.style.setProperty('--accent',     config.accent);
 document.documentElement.style.setProperty('--accent-dk',  darken(config.accent, 15));
 document.documentElement.style.setProperty('--gold',       config.gold);
-
+ 
 document.getElementById('header-profession').textContent = config.profession;
 document.getElementById('header-badge').textContent      = config.name + ' \u00b7 ' + config.city;
 document.getElementById('footer-name').textContent       = config.name;
 document.getElementById('footer-profession').textContent = config.profession;
 document.getElementById('footer-city').textContent       = config.city;
-
+ 
 // ══ CONFIGURACIÓN ══════════════════════════════════════
 const API_KEY     = config.api_key;
 const CALENDAR_ID = config.email;
@@ -385,10 +388,10 @@ const APPS_SCRIPT = config.apps_script;
 const OWNER_EMAIL = config.email;
 const OWNER_NAME  = config.name;
 const WORK_DAYS   = config.days.split(',').map(Number);
-const BUFFER_MINS = 60; // ── Tiempo entre citas: fijo 1 hora ──
+const BUFFER_MINS = 120; // ── Bloqueo tras cada cita: 2 horas (trabajo + desplazamiento) ──
 const DURATIONS   = config.duration.split(',').map(Number);
 const DEFAULT_DUR = DURATIONS[0];
-
+ 
 // ══ TIPOS DE SERVICIO ══════════════════════════════════
 // 1 hora = Capacitación | 2 horas = Asesoría
 const SERVICE_TYPES = {
@@ -399,7 +402,7 @@ const SERVICE_TYPES = {
   2.5: { icon: '\uD83D\uDCBC', title: 'Asesor\u00eda',       desc: 'Consulta especializada (2h 30min)' },
   3.5: { icon: '\uD83D\uDD0D', title: 'Inspecci\u00f3n',     desc: 'Visita de inspecci\u00f3n (3h 30min)' }
 };
-
+ 
 // ══ FESTIVOS COLOMBIA 2026 – 2027 ══════════════════════
 var FESTIVOS_CO = {
   '2026-01-01':'A\u00f1o Nuevo','2026-01-12':'Reyes Magos','2026-03-23':'San Jos\u00e9',
@@ -420,7 +423,7 @@ var FESTIVOS_CO = {
   '2027-12-08':'Inmaculada Concepci\u00f3n','2027-12-25':'Navidad'
 };
 function esFestivo(date) { return FESTIVOS_CO[toDateStr(date)] || null; }
-
+ 
 // ══ HORARIOS BASE ══════════════════════════════════════
 function buildSlots(startTime, endTime, dur) {
   var slots = [];
@@ -436,15 +439,15 @@ function buildSlots(startTime, endTime, dur) {
     var h = Math.floor(cur / 60);
     var m = cur % 60;
     slots.push((h < 10 ? '0' : '') + h + ':' + (m < 10 ? '0' : '') + m);
-    cur += durMins + BUFFER_MINS; // ── 1 hora de buffer entre citas ──
+    cur += 60; // ── Mostrar TODAS las horas (7,8,9,10,11...); el bloqueo por desplazamiento se aplica al marcar ocupado, no aquí ──
   }
   return slots;
 }
-
+ 
 function getAM(dur) { return buildSlots(config.am_start, config.am_end, dur); }
 function getPM(dur) { return config.pm_enabled ? buildSlots(config.pm_start, config.pm_end, dur) : []; }
 function getAllH(dur) { return [...getAM(dur), ...getPM(dur)]; }
-
+ 
 function endHour(h, dur) {
   var parts     = h.split(':');
   var totalMins = parseInt(parts[0]) * 60 + parseInt(parts[1]) + Math.round(dur * 60);
@@ -452,7 +455,7 @@ function endHour(h, dur) {
   var min = totalMins % 60;
   return (hr < 10 ? '0' : '') + hr + ':' + (min < 10 ? '0' : '') + min;
 }
-
+ 
 function durStr(d) {
   if (d === 1)   return '1 hora';
   if (d === 2)   return '2 horas';
@@ -462,7 +465,7 @@ function durStr(d) {
   if (d === 3.5) return '3h 30min';
   return d + ' horas';
 }
-
+ 
 // ══ UTILIDADES DE COLOR ════════════════════════════════
 function lighten(color, percent) {
   var num = parseInt(color.replace("#",""), 16);
@@ -473,11 +476,11 @@ function lighten(color, percent) {
   return "#" + (0x1000000 + (R<255?R<1?0:R:255)*0x10000 + (G<255?G<1?0:G:255)*0x100+(B<255?B<1?0:B:255)).toString(16).slice(1);
 }
 function darken(color, percent) { return lighten(color, -percent); }
-
+ 
 // ══ FECHAS EN ESPAÑOL ═════════════════════════════════
 var DIAS_ES  = ['domingo','lunes','martes','mi\u00e9rcoles','jueves','viernes','s\u00e1bado'];
 var MESES_ES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-
+ 
 function spanishDate(d) {
   return cap(DIAS_ES[d.getDay()]) + ', ' + d.getDate() + ' de ' + MESES_ES[d.getMonth()] + ' de ' + d.getFullYear();
 }
@@ -490,7 +493,7 @@ function formatTime(isoStr) {
   if (p.length > 1) return p[1].substring(0,5);
   return isoStr;
 }
-
+ 
 // ══ ESTADO ═════════════════════════════════════════════
 var currentDate  = new Date();
 var selectedDate = null;
@@ -498,7 +501,7 @@ var selectedHour = null;
 var sessionDur   = DEFAULT_DUR;
 var busySlots    = {};
 var formData     = {};
-
+ 
 // ══ INIT ═══════════════════════════════════════════════
 const DUR_LABELS = { 1: '1h', 2: '2h', 3: '3h', 1.5: '1h30', 2.5: '2h30', 3.5: '3h30' };
 var durContainer = document.getElementById('dur-btns-container');
@@ -509,11 +512,11 @@ DURATIONS.forEach(function(d, i) {
   btn.onclick = function() { setDuration(d); };
   durContainer.appendChild(btn);
 });
-
+ 
 renderCalendar();
 loadMonthBusy(currentDate.getFullYear(), currentDate.getMonth());
 showServiceInfo(DEFAULT_DUR);
-
+ 
 function setDuration(h) {
   sessionDur = h;
   document.querySelectorAll('.dur-btn').forEach(function(b) {
@@ -525,7 +528,7 @@ function setDuration(h) {
   if (selectedDate) renderSlots(selectedDate);
   renderCalendar();
 }
-
+ 
 function showServiceInfo(dur) {
   var info = SERVICE_TYPES[dur];
   if (!info) return;
@@ -535,34 +538,34 @@ function showServiceInfo(dur) {
   document.getElementById('service-desc').textContent  = info.desc;
   box.classList.add('visible');
 }
-
+ 
 // ══ CALENDARIO ═════════════════════════════════════════
 function isWorkDay(date) { return WORK_DAYS.includes(date.getDay()); }
-
+ 
 function renderCalendar() {
   var y = currentDate.getFullYear();
   var m = currentDate.getMonth();
   document.getElementById('month-label').textContent = cap(MESES_ES[m]) + ' ' + y;
-
+ 
   var grid = document.getElementById('calendar');
   grid.innerHTML = '';
-
+ 
   ['Lu','Ma','Mi','Ju','Vi','S\u00e1','Do'].forEach(function(d) {
     var h = document.createElement('div');
     h.className = 'cal-head';
     h.textContent = d;
     grid.appendChild(h);
   });
-
+ 
   var firstDay   = new Date(y, m, 1).getDay();
   var startOffset = firstDay === 0 ? 6 : firstDay - 1;
   var daysInMonth = new Date(y, m + 1, 0).getDate();
   var today = new Date(); today.setHours(0,0,0,0);
-
+ 
   for (var i = 0; i < startOffset; i++) {
     grid.appendChild(document.createElement('div'));
   }
-
+ 
   for (var d = 1; d <= daysInMonth; d++) {
     (function(day) {
       var date    = new Date(y, m, day);
@@ -570,7 +573,7 @@ function renderCalendar() {
       cell.className = 'cal-day';
       cell.textContent = day;
       var festivo = esFestivo(date);
-
+ 
       if (date < today || !isWorkDay(date)) {
         cell.classList.add('disabled');
       } else if (festivo) {
@@ -590,7 +593,7 @@ function renderCalendar() {
     })(d);
   }
 }
-
+ 
 function changeMonth(dir) {
   currentDate.setMonth(currentDate.getMonth() + dir);
   selectedDate = null; selectedHour = null;
@@ -598,7 +601,7 @@ function changeMonth(dir) {
   renderCalendar();
   loadMonthBusy(currentDate.getFullYear(), currentDate.getMonth());
 }
-
+ 
 function selectDate(d) {
   selectedDate = new Date(d);
   selectedHour = null;
@@ -607,7 +610,7 @@ function selectDate(d) {
   renderSlots(d);
   document.getElementById('slots-card').style.display = 'block';
 }
-
+ 
 function renderSlots(d) {
   var dateStr = toDateStr(d);
   var busy    = busySlots[dateStr] || [];
@@ -620,18 +623,18 @@ function renderSlots(d) {
   });
   document.getElementById('slots-container').innerHTML = html || '<div class="alert alert-info">No hay horarios disponibles para este d\u00eda.</div>';
 }
-
+ 
 function selectSlot(h) {
   selectedHour = h;
   renderSlots(selectedDate);
   document.getElementById('btn-next1').disabled = false;
 }
-
+ 
 // ══ CARGA DE DISPONIBILIDAD con detección de BLOQUEOS ═
 function loadMonthBusy(y, m) {
   var monthStart = new Date(y, m, 1);
   var monthEnd   = new Date(y, m + 1, 0);
-
+ 
   fetch('https://www.googleapis.com/calendar/v3/calendars/' + encodeURIComponent(CALENDAR_ID) +
         '/events?key=' + API_KEY +
         '&timeMin=' + monthStart.toISOString() +
@@ -647,14 +650,15 @@ function loadMonthBusy(y, m) {
           var evEnd   = evt.end && evt.end.dateTime ? new Date(evt.end.dateTime) : new Date(evStart.getTime() + 3600000);
           var dateStr = toDateStr(evStart);
           if (!busySlots[dateStr]) busySlots[dateStr] = [];
-
+ 
           // ── Cualquier evento (cita, bloqueo o evento manual) bloquea
           //    todos los slots que se solapen con su duración ──
+          var evEndBuffered = new Date(evEnd.getTime() + BUFFER_MINS * 60000); // ── incluye desplazamiento tras la cita ──
           getAllH(sessionDur).forEach(function(slot) {
             var parts     = slot.split(':');
             var slotStart = new Date(evStart); slotStart.setHours(parseInt(parts[0]), parseInt(parts[1]), 0, 0);
             var slotEnd   = new Date(slotStart.getTime() + Math.round(sessionDur * 60) * 60000);
-            if (slotStart < evEnd && slotEnd > evStart) {
+            if (slotStart < evEndBuffered && slotEnd > evStart) {
               if (!busySlots[dateStr].includes(slot)) busySlots[dateStr].push(slot);
             }
           });
@@ -668,7 +672,7 @@ function loadMonthBusy(y, m) {
         '<div class="alert alert-error">Error al cargar disponibilidad. Verifica la conexi\u00f3n.</div>';
     });
 }
-
+ 
 // ══ PASOS ══════════════════════════════════════════════
 function updateSteps(step) {
   ['step1','step2','step3'].forEach(function(s, i) {
@@ -682,22 +686,22 @@ function updateSteps(step) {
     document.getElementById(p).style.display = (i + 1 === step) ? 'block' : 'none';
   });
 }
-
+ 
 function goStep1() { updateSteps(1); window.scrollTo({top:0,behavior:'smooth'}); }
 function irPaso2() { updateSteps(2); window.scrollTo({top:0,behavior:'smooth'}); }
 function goStep2() { updateSteps(2); window.scrollTo({top:0,behavior:'smooth'}); }
-
+ 
 function goStep3() {
   var nombre   = document.getElementById('inp-nombre').value.trim();
   var apellido = document.getElementById('inp-apellido').value.trim();
   var tel      = document.getElementById('inp-tel').value.trim();
-
+ 
   if (!nombre || !apellido || !tel) {
     document.getElementById('form-error').innerHTML =
       '<div class="alert alert-error">\u26a0\ufe0f Por favor completa todos los campos obligatorios</div>';
     return;
   }
-
+ 
   formData.nombre    = nombre;
   formData.apellido  = apellido;
   formData.tel       = tel;
@@ -705,7 +709,7 @@ function goStep3() {
   formData.empresa   = document.getElementById('inp-empresa').value.trim();
   formData.modalidad = document.getElementById('inp-modalidad').value;
   formData.motivo    = document.getElementById('inp-motivo').value;
-
+ 
   var fmtDate = spanishDate(selectedDate);
   var summary =
     '<div class="summary-row"><span class="summary-icon">\uD83D\uDC64</span><span class="summary-label">Nombre</span><span class="summary-val">' + nombre + ' ' + apellido + '</span></div>' +
@@ -720,21 +724,21 @@ function goStep3() {
   updateSteps(3);
   window.scrollTo({top:0,behavior:'smooth'});
 }
-
+ 
 // ══ EMAILJS ════════════════════════════════════════════
 const EMAILJS_PUBLIC_KEY  = 'U9vkw-bVuc5xBfYS_';
 const EMAILJS_SERVICE_ID  = 'service_9rmp63j';
 const EMAILJS_TPL_CLIENTE = 'template_27rs80v';
 const EMAILJS_TPL_OWNER   = 'template_dnypdxq';
-
+ 
 emailjs.init(EMAILJS_PUBLIC_KEY);
-
+ 
 async function enviarCorreos(payload) {
   var startISO = payload.start_time;
   var endISO   = payload.end_time;
   var dStr     = durStr(sessionDur);
   var svcTitle = SERVICE_TYPES[sessionDur] ? SERVICE_TYPES[sessionDur].title + ' - ' + dStr : dStr;
-
+ 
   var params = {
     to_email:         payload.client_email,
     client_name:      payload.client_name,
@@ -752,17 +756,17 @@ async function enviarCorreos(payload) {
     meet_link:        'No aplica',
     email:            payload.client_email
   };
-
+ 
   if (payload.client_email) {
     try { await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_CLIENTE, params); }
     catch(e) { console.warn('Error correo cliente:', e); }
   }
-
+ 
   var paramsOwner = Object.assign({}, params, { to_email: payload.owner_email });
   try { await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TPL_OWNER, paramsOwner); }
   catch(e) { console.warn('Error correo owner:', e); }
 }
-
+ 
 // ══ CONFIRMAR CITA — YA LEE LA RESPUESTA REAL DEL BACKEND ══
 async function confirmarCita() {
   var btn    = document.getElementById('btn-confirm');
@@ -770,12 +774,12 @@ async function confirmarCita() {
   btn.disabled = true;
   btn.innerHTML = '<div class="spinner"></div> Procesando\u2026';
   errDiv.innerHTML = '';
-
+ 
   var dateStr  = toDateStr(selectedDate);
   var startISO = dateStr + 'T' + selectedHour + ':00';
   var endISO   = dateStr + 'T' + endHour(selectedHour, sessionDur) + ':00';
   var nombre   = formData.nombre + ' ' + formData.apellido;
-
+ 
   var payload = {
     client_name:    nombre,
     client_phone:   formData.tel,
@@ -789,7 +793,7 @@ async function confirmarCita() {
     owner_name:     OWNER_NAME,
     calendar_id:    CALENDAR_ID
   };
-
+ 
   try {
     var resp = await fetch(APPS_SCRIPT, { method: 'POST', body: JSON.stringify(payload) });
     var respData = await resp.json();
@@ -807,7 +811,7 @@ async function confirmarCita() {
     btn.innerHTML = '\u2705 Confirmar cita';
   }
 }
-
+ 
 function mostrarExito(nombre) {
   hide('booking-screen'); hide('steps-bar');
   var ss = document.getElementById('success-screen');
@@ -820,7 +824,7 @@ function mostrarExito(nombre) {
     '<div class="summary-row"><span class="summary-icon">\u23F1</span><span class="summary-label">Servicio</span><span class="summary-val">' + (SERVICE_TYPES[sessionDur] ? SERVICE_TYPES[sessionDur].title + ' \u2014 ' : '') + durStr(sessionDur) + '</span></div>';
   ss.scrollIntoView({behavior:'smooth'});
 }
-
+ 
 function reiniciar() {
   selectedDate = null; selectedHour = null; formData = {}; sessionDur = DEFAULT_DUR;
   document.querySelectorAll('.dur-btn').forEach(function(b, i) { b.classList.toggle('active', i === 0); });
@@ -830,7 +834,7 @@ function reiniciar() {
   goStep1();
   window.scrollTo({top:0,behavior:'smooth'});
 }
-
+ 
 // ══ UTILIDADES ═════════════════════════════════════════
 function toDateStr(d) {
   return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
@@ -841,3 +845,4 @@ function hide(id) { document.getElementById(id).style.display = 'none'; }
 </script>
 </body>
 </html>
+ 
